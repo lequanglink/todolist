@@ -1,57 +1,104 @@
-import React, { useState } from 'react';
-import TodoForm from './components/TodoForm';
-import TodoList from './components/TodoList';
+import React, { useState } from "react";
+import Sidebar from "./components/Sidebar";
+import TaskInput from "./components/TaskInput";
+import TaskList from "./components/TaskList";
 import './App.css';
 
-const App = () => {
-  const [todos, setTodos] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
-  const [editText, setEditText] = useState('');
+function App() {
+  const [tasks, setTasks] = useState([
+    { id: 1, title: "Work out", time: "8:00", completed: true, selected: false, editable: false },
+    { id: 2, title: "Design team meeting", time: "2:30", completed: false, selected: false, editable: false },
+    { id: 3, title: "Hand off the project", time: "7:00", completed: false, selected: false, editable: false },
+    { id: 4, title: "Read 5 pages of 'sprint'", time: "10:30", completed: false, selected: false, editable: false },
+  ]);
 
-  const addTodo = (todo) => {
-    setTodos([...todos, { text: todo, completed: false }]);
+  const [newTask, setNewTask] = useState("");
+  const [newTaskTime, setNewTaskTime] = useState("");
+
+  const handleCompleteTask = (id) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, completed: !task.completed };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
   };
 
-  const toggleTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos[index].completed = !newTodos[index].completed;
-    setTodos(newTodos);
+  const handleAddTask = () => {
+    if (newTask && newTaskTime) {
+      const newTaskItem = {
+        id: tasks.length + 1,
+        title: newTask,
+        time: newTaskTime,
+        completed: false,
+        selected: false,
+        editable: false,
+      };
+      setTasks([...tasks, newTaskItem]);
+      setNewTask("");
+      setNewTaskTime("");
+    }
   };
 
-  const deleteTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
+  const handleDeleteTask = (id) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
   };
 
-  const editTodo = (index, text) => {
-    setEditIndex(index);
-    setEditText(text);
+  const handleSelectTask = (id) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, selected: !task.selected, editable: task.selected ? task.editable : false };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
   };
 
-  const updateTodo = (index, newText) => {
-    const newTodos = [...todos];
-    newTodos[index].text = newText;
-    setTodos(newTodos);
-    setEditIndex(null);
-    setEditText('');
+  const handleEditTask = (id) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, editable: !task.editable };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  };
+
+  const handleTaskChange = (id, newTitle) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, title: newTitle };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
   };
 
   return (
-    <div className="app">
-      <div className="app-container">
-        <h1>Todo List</h1>
-        <TodoForm addTodo={addTodo} />
-        <TodoList
-          todos={todos}
-          toggleTodo={toggleTodo}
-          deleteTodo={deleteTodo}
-          editTodo={editTodo}
-          updateTodo={updateTodo}
-          editIndex={editIndex}
-          editText={editText}
-          setEditText={setEditText}
+    <div className="container">
+      <Sidebar />
+      <div className="main">
+        <h1>Today's main focus</h1>
+        <h2>Design team meeting</h2>
+        <TaskInput
+          newTask={newTask}
+          setNewTask={setNewTask}
+          newTaskTime={newTaskTime}
+          setNewTaskTime={setNewTaskTime}
+          handleAddTask={handleAddTask}
         />
+        <div className="task-list-container">
+          <TaskList
+            tasks={tasks}
+            handleCompleteTask={handleCompleteTask}
+            handleDeleteTask={handleDeleteTask}
+            handleSelectTask={handleSelectTask}
+            handleEditTask={handleEditTask}
+            handleTaskChange={handleTaskChange}
+          />
+        </div>
       </div>
     </div>
   );
