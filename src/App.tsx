@@ -1,21 +1,30 @@
 import React, { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import TaskInput from "./components/TaskInput";
-import TaskList from "./components/TaskList";
+import Sidebar from "./Sidebar";
+import TaskInput from "./TaskInput";
+import TaskList from "./TaskList";
 import './App.css';
 
-function App() {
-  const [tasks, setTasks] = useState([
+interface Task {
+  id: number;
+  title: string;
+  time: string;
+  completed: boolean;
+  selected: boolean;
+  editable: boolean;
+}
+
+const App: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>([
     { id: 1, title: "Work out", time: "8:00", completed: true, selected: false, editable: false },
     { id: 2, title: "Design team meeting", time: "2:30", completed: false, selected: false, editable: false },
     { id: 3, title: "Hand off the project", time: "7:00", completed: false, selected: false, editable: false },
     { id: 4, title: "Read 5 pages of 'sprint'", time: "10:30", completed: false, selected: false, editable: false },
   ]);
 
-  const [newTask, setNewTask] = useState("");
-  const [newTaskTime, setNewTaskTime] = useState("");
+  const [newTask, setNewTask] = useState<string>("");
+  const [newTaskTime, setNewTaskTime] = useState<string>("");
 
-  const handleCompleteTask = (id) => {
+  const handleCompleteTask = (id: number) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, completed: !task.completed };
@@ -27,7 +36,7 @@ function App() {
 
   const handleAddTask = () => {
     if (newTask && newTaskTime) {
-      const newTaskItem = {
+      const newTaskItem: Task = {
         id: tasks.length + 1,
         title: newTask,
         time: newTaskTime,
@@ -41,12 +50,12 @@ function App() {
     }
   };
 
-  const handleDeleteTask = (id) => {
+  const handleDeleteTask = (id: number) => {
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
   };
 
-  const handleSelectTask = (id) => {
+  const handleSelectTask = (id: number) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, selected: !task.selected, editable: task.selected ? task.editable : false };
@@ -56,7 +65,7 @@ function App() {
     setTasks(updatedTasks);
   };
 
-  const handleEditTask = (id) => {
+  const handleEditTask = (id: number) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, editable: !task.editable };
@@ -66,7 +75,7 @@ function App() {
     setTasks(updatedTasks);
   };
 
-  const handleTaskChange = (id, newTitle) => {
+  const handleTaskChange = (id: number, newTitle: string) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, title: newTitle };

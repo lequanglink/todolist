@@ -1,6 +1,20 @@
 import React from "react";
 
-function TaskInput({ newTask, setNewTask, newTaskTime, setNewTaskTime, handleAddTask }) {
+interface TaskInputProps {
+  newTask: string;
+  setNewTask: React.Dispatch<React.SetStateAction<string>>;
+  newTaskTime: string;
+  setNewTaskTime: React.Dispatch<React.SetStateAction<string>>;
+  handleAddTask: () => void;
+}
+
+const TaskInput: React.FC<TaskInputProps> = ({ 
+  newTask, 
+  setNewTask, 
+  newTaskTime, 
+  setNewTaskTime, 
+  handleAddTask 
+}) => {
   return (
     <div className="task-input">
       <span className="task-color" style={{ backgroundColor: "pink" }} />

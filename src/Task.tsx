@@ -1,6 +1,30 @@
 import React from "react";
 
-function Task({ task, handleCompleteTask, handleDeleteTask, handleSelectTask, handleEditTask, handleTaskChange }) {
+interface TaskProps {
+  task: {
+    id: number;
+    title: string;
+    time: string;
+    completed: boolean;
+    selected: boolean;
+    editable: boolean;
+    color?: string;
+  };
+  handleCompleteTask: (id: number) => void;
+  handleDeleteTask: (id: number) => void;
+  handleSelectTask: (id: number) => void;
+  handleEditTask: (id: number) => void;
+  handleTaskChange: (id: number, value: string) => void;
+}
+
+const Task: React.FC<TaskProps> = ({ 
+  task, 
+  handleCompleteTask, 
+  handleDeleteTask, 
+  handleSelectTask, 
+  handleEditTask, 
+  handleTaskChange 
+}) => {
   return (
     <div className="task">
       <input
