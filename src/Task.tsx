@@ -44,12 +44,12 @@ const Task: React.FC<TaskProps> = ({
       )}
       <div className="task-time">
         <p>{task.time}</p>
-        <input
+        {/* <input
           type="checkbox"
           checked={task.completed}
           onChange={() => handleCompleteTask(task.id)}
           disabled={task.selected}
-        />
+        /> */}
         <button onClick={() => handleEditTask(task.id)} disabled={task.selected}>
           {task.editable ? "Save" : "Edit"}
         </button>
